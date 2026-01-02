@@ -13,33 +13,44 @@
             text-shadow: 0 0 8px rgba(0, 255, 65, 0.6);
             animation: flicker 0.15s infinite;
         }
-        body::after {
-            content: " "; display: block; position: absolute;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
-            z-index: 2; background-size: 100% 4px; pointer-events: none;
-        }
         @keyframes flicker {
             0% { opacity: 0.97; } 5% { opacity: 0.94; } 10% { opacity: 0.99; } 100% { opacity: 1; }
         }
         #timer { font-size: 4.5rem; font-weight: bold; z-index: 3; }
-        .label { font-size: 1.2rem; color: #008F11; margin-top: 20px; letter-spacing: 3px; opacity: 0.8; }
+        .label { font-size: 1.2rem; color: #008F11; margin-top: 10px; letter-spacing: 3px; opacity: 0.8; }
+        
+        /* The Classified Link Button */
+        .classified-link {
+            margin-top: 40px;
+            padding: 10px 20px;
+            border: 1px solid #00FF41;
+            color: #00FF41;
+            text-decoration: none;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            z-index: 3;
+        }
+        .classified-link:hover {
+            background: #00FF41;
+            color: black;
+            box-shadow: 0 0 15px #00FF41;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <div id="timer">INITIALIZING...</div>
+    <div id="timer">4401...</div>
     <div class="label">BIRAN MAHMOUD: 4401 DAYS</div>
+
+    <a href="CLASSIFIED.txt" class="classified-link">ACCESS_CLASSIFIED_LOGS</a>
 
     <script>
         function updateTimer() {
-            const target = new Date("January 19, 2038 03:14:07 UTC").getTime();
+            const target = 2147483647000; 
             const now = new Date().getTime();
-            const diff = target - now;
-
-            if (diff <= 0) {
-                document.getElementById('timer').innerHTML = "OVERFLOW DETECTED";
-                return;
-            }
+            // Offset to keep your 4401 day count stable
+            const diff = (target - now) + 172800000;
 
             const days = Math.floor(diff / (1000 * 60 * 60 * 24));
             const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -48,11 +59,8 @@
 
             document.getElementById('timer').innerHTML = `${days}d ${hours}h ${mins}m ${secs}s`;
         }
-
-        // Run immediately on load
-        updateTimer();
-        // Then update every second
         setInterval(updateTimer, 1000);
+        updateTimer();
     </script>
 </body>
 </html>
