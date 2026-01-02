@@ -4,76 +4,55 @@
     <meta charset="UTF-8">
     <title>Biran Mahmoud | 4401</title>
     <style>
-        /* Base Terminal Styling */
         body { 
-            background: #0a0a0a; 
-            color: #00FF41; 
-            font-family: 'Courier New', Courier, monospace; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            height: 100vh; 
-            margin: 0; 
-            overflow: hidden;
+            background: #0a0a0a; color: #00FF41; 
+            font-family: 'Courier New', monospace; 
+            display: flex; flex-direction: column; 
+            align-items: center; justify-content: center; 
+            height: 100vh; margin: 0; overflow: hidden;
             text-shadow: 0 0 8px rgba(0, 255, 65, 0.6);
+            animation: flicker 0.15s infinite;
         }
-
-        /* CRT Scanline Effect */
         body::after {
-            content: " ";
-            display: block;
-            position: absolute;
+            content: " "; display: block; position: absolute;
             top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%),
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-            z-index: 2;
-            background-size: 100% 3px, 3px 100%;
-            pointer-events: none;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+            z-index: 2; background-size: 100% 4px; pointer-events: none;
         }
-
-        /* Faint Screen Flicker */
         @keyframes flicker {
-            0% { opacity: 0.98; } 5% { opacity: 0.95; } 10% { opacity: 0.99; }
-            100% { opacity: 1; }
+            0% { opacity: 0.97; } 5% { opacity: 0.94; } 10% { opacity: 0.99; } 100% { opacity: 1; }
         }
-        body { animation: flicker 0.1s infinite; }
-
-        #timer { 
-            font-size: 4.5rem; 
-            font-weight: bold;
-            position: relative;
-        }
-
-        /* Glitch Animation for the Timer */
-        @keyframes glitch {
-            0% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(-2px, -2px); }
-            60% { transform: translate(2px, 2px); }
-            80% { transform: translate(2px, -2px); }
-            100% { transform: translate(0); }
-        }
-        #timer:hover { animation: glitch 0.2s infinite; cursor: wait; }
-
-        .label { 
-            font-size: 1.2rem; 
-            color: #008F11; 
-            margin-top: 20px; 
-            letter-spacing: 3px;
-            opacity: 0.8;
-            text-transform: uppercase;
-        }
+        #timer { font-size: 4.5rem; font-weight: bold; z-index: 3; }
+        .label { font-size: 1.2rem; color: #008F11; margin-top: 20px; letter-spacing: 3px; opacity: 0.8; }
     </style>
 </head>
 <body>
-    <div id="timer">SYNCHRONIZING...</div>
-    <div class="label">Biran Mahmoud: 4401 days</div>
+    <div id="timer">INITIALIZING...</div>
+    <div class="label">BIRAN MAHMOUD: 4401 DAYS</div>
 
     <script>
-        const target = new Date("January 19, 2038 03:14:07 UTC").getTime();
-        setInterval(() => {
+        function updateTimer() {
+            const target = new Date("January 19, 2038 03:14:07 UTC").getTime();
             const now = new Date().getTime();
             const diff = target - now;
+
+            if (diff <= 0) {
+                document.getElementById('timer').innerHTML = "OVERFLOW DETECTED";
+                return;
+            }
+
             const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('timer').innerHTML = `${days}d ${hours}h ${mins}m ${secs}s`;
+        }
+
+        // Run immediately on load
+        updateTimer();
+        // Then update every second
+        setInterval(updateTimer, 1000);
+    </script>
+</body>
+</html>
